@@ -1,5 +1,6 @@
 export default {
-  LOGO_FONTSIZE: "60px",
-  LOGO_FONTSIZE_SMALL: "18px",
-  LOGO_COLOR: "palevioletred"
+  PRIMARY_COLOR: '#f49881',
+  SECOND_COLOR: '#31bfbf',
+  SPACING: 8,
+  spacing: x => `${x * 8}px`
 };
