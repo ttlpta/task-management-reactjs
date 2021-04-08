@@ -1,35 +1,37 @@
-import React, { useState } from "react";
-import { TextField, Button } from "../../components";
+import React from "react";
+import { TextFieldForm, Button, Card, Form } from "../../components";
+import { LoginSchema } from "../../schemas";
 
 import LoginStyled from "./LoginStyled";
-import { Card } from "../../components";
 export default function Login() {
-  const [txt, setTxt] = useState("click");
-  function handleClick() {
-    setTxt("clicked");
-  }
+  const handleSubmit = (data) => {
+    console.log(data);
+  };
 
   return (
     <LoginStyled>
       <Card className="loginForm__wrapper">
-        <h1>{txt}</h1>
-        <TextField
-          label="Username"
-          fullWidth
-          className="loginForm__txtField--username"
-        />
-        <TextField
-          label="Password"
-          fullWidth
-          className="loginForm__txtField--pw"
-        />
-        <Button
-          label="Submit"
-          fullWidth
-          color="secondary"
-          className="loginForm__btn--submit"
-          onClick={handleClick}
-        />
+        <Form onSubmit={handleSubmit} schema={LoginSchema}>
+          <TextFieldForm
+            name="username"
+            label="Username"
+            fullWidth
+            className="loginForm__txtField--username"
+          />
+          <TextFieldForm
+            name="password"
+            label="Password"
+            fullWidth
+            className="loginForm__txtField--pw"
+          />
+          <Button
+            label="Submit"
+            fullWidth
+            type="submit"
+            color="secondary"
+            className="loginForm__btn--submit"
+          />
+        </Form>
       </Card>
     </LoginStyled>
   );

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 
-export default styled(Box)`
-  display: flex;
-`;
+export default styled(Button)``;

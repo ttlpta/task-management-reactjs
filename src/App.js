@@ -9,7 +9,6 @@ import { ThemeProvider } from "styled-components";
 import { Provider, useSelector } from "react-redux";
 import {
   createMuiTheme,
-  makeStyles,
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
 
