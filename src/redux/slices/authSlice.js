@@ -5,7 +5,7 @@ import { STATUS } from "../../config";
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (body, { dispatch, rejectWithValue }) => {
+  async (body, { rejectWithValue }) => {
     try {
       const { data } = await axios.post("/auth/login", body);
 

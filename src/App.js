@@ -11,10 +11,10 @@ import {
   createMuiTheme,
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
-
+import { PersistGate } from "redux-persist/integration/react";
 import { Loading, Snackbar } from "./components";
 
-import store from "./redux/store";
+import reduxStore from "./redux/store";
 
 import Normalize from "./Normalize";
 import themeLight from "./themes/defaultTheme";
@@ -28,7 +28,7 @@ const theme = createMuiTheme({
       main: themeLight.SECOND_COLOR,
     },
   },
-  spacing: themeLight.SPACING
+  spacing: themeLight.SPACING,
 });
 
 const Login = lazy(() => import("./scenes/Login/Login"));
@@ -40,27 +40,29 @@ export default function App() {
   return (
     <Fragment>
       <Normalize />
-      <Provider store={store}>
-        <ThemeProvider theme={themeLight}>
-          <MuiThemeProvider theme={theme}>
-            <Router>
-              <Suspense fallback={Loading()}>
-                <Page500>
-                  <Switch>
-                    <Route exact path="/login">
-                      <Login />
-                    </Route>
-                    <PrivateRouter path="/">
-                      <List />
-                    </PrivateRouter>
-                    <Route name="Page 404" component={Page404} />
-                  </Switch>
-                </Page500>
-              </Suspense>
-            </Router>
-            <Snackbar />
-          </MuiThemeProvider>
-        </ThemeProvider>
+      <Provider store={reduxStore.store}>
+        <PersistGate loading={null} persistor={reduxStore.persistor}>
+          <ThemeProvider theme={themeLight}>
+            <MuiThemeProvider theme={theme}>
+              <Router>
+                <Suspense fallback={Loading()}>
+                  <Page500>
+                    <Switch>
+                      <Route exact path="/login">
+                        <Login />
+                      </Route>
+                      <PrivateRouter path="/">
+                        <List />
+                      </PrivateRouter>
+                      <Route name="Page 404" component={Page404} />
+                    </Switch>
+                  </Page500>
+                </Suspense>
+              </Router>
+              <Snackbar />
+            </MuiThemeProvider>
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     </Fragment>
   );

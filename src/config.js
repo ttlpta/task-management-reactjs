@@ -8,3 +8,5 @@ export const STATUS = {
   SUCCEEDED: 'succeeded',
   FAILED : 'failed',
 }
+
+export const APP_NAME = 'ANHPT'
