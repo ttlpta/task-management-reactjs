@@ -1,5 +1,5 @@
 import React from "react";
-import TextField from "./TextField";
+import TextField from "../TextField/TextField";
 
 export default function TextFieldForm({ register, name, errors, ...props }) {
   const { ref, ...methods } = register(name);

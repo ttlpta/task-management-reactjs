@@ -9,8 +9,8 @@ export default styled(Box)`
   justify-content: center;
   .loginForm {
     &__wrapper {
-      min-width: 370px;
-      padding: 20px;
+      width: 370px;
+      padding: ${({ theme }) => theme.spacing(3)};
     }
     &__txtField {
       &--pw {

@@ -1,12 +1,7 @@
 import axios from "../axios";
 
 export const login = async body => {
-  try {
-    const { data, status } = await axios.post("/login", body);
-    if (status !== 201) throw "Error";
+  const { data, status } = await axios.post("/auth/login", body);
 
-    return true;
-  } catch (error) {
-    throw error;
-  }
+  console.log(data, status);
 };

@@ -1,17 +1,50 @@
 import React from "react";
-import { TextFieldForm, Button, Card, Form } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
+import { login, authState } from "../../redux/slices/authSlice";
+import { showAlert } from "../../redux/slices/uiSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import {
+  TextFieldForm,
+  Button,
+  Card,
+  Form,
+  CheckboxForm,
+} from "../../components";
 import { LoginSchema } from "../../schemas";
-
 import LoginStyled from "./LoginStyled";
+
 export default function Login() {
-  const handleSubmit = (data) => {
-    console.log(data);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+  const handleSubmit = async (data) => {
+    try {
+      const result = await dispatch(login(data));
+      unwrapResult(result);
+      const { from } = location.state || { from: { pathname: "/" } };
+      history.replace(from);
+    } catch (error) {
+      dispatch(
+        showAlert({
+          show: true,
+          message: error.message,
+          type: "error",
+        })
+      );
+    }
   };
+  
+  const auth = useSelector(authState);
 
   return (
     <LoginStyled>
       <Card className="loginForm__wrapper">
-        <Form onSubmit={handleSubmit} schema={LoginSchema}>
+        <Form
+          onSubmit={handleSubmit}
+          schema={LoginSchema}
+          loading={auth.status === "loading"}
+        >
           <TextFieldForm
             name="username"
             label="Username"
@@ -19,11 +52,13 @@ export default function Login() {
             className="loginForm__txtField--username"
           />
           <TextFieldForm
+            type="password"
             name="password"
             label="Password"
             fullWidth
             className="loginForm__txtField--pw"
           />
+          <CheckboxForm label="Remember me" name="isRememberMe" />
           <Button
             label="Submit"
             fullWidth

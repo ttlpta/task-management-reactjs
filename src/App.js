@@ -12,7 +12,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
 
-import { Loading } from "./components";
+import { Loading, Snackbar } from "./components";
 
 import store from "./redux/store";
 
@@ -58,6 +58,7 @@ export default function App() {
                 </Page500>
               </Suspense>
             </Router>
+            <Snackbar />
           </MuiThemeProvider>
         </ThemeProvider>
       </Provider>
