@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import axios from "../../axios";
 import { STATUS } from "../../config";
 
@@ -16,22 +15,26 @@ export const login = createAsyncThunk(
   }
 );
 
+const initialState = {
+  accessToken: "",
+  refreshToken: "",
+  status: STATUS.IDLE,
+};
+
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    isLogined: false,
-    accessToken: "",
-    refreshToken: "",
-    status: STATUS.IDLE,
+  initialState,
+  reducers: {
+    logout: async () => {
+      return initialState;
+    },
   },
-  reducers: {},
   extraReducers: {
     [login.pending]: (state) => {
       state.status = STATUS.LOADING;
     },
     [login.fulfilled]: (state, action) => {
       state.status = STATUS.SUCCEEDED;
-      state.isLogined = true;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload?.refreshToken;
     },
@@ -41,6 +44,7 @@ export const authSlice = createSlice({
     },
   },
 });
+export const { logout } = authSlice.actions;
 
 export const authState = (state) => state.auth;
 

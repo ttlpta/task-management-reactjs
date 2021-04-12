@@ -12,7 +12,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
 import { PersistGate } from "redux-persist/integration/react";
-import { Loading, Snackbar } from "./components";
+import { Layout, Loading, Snackbar } from "./components";
 
 import reduxStore from "./redux/store";
 
@@ -26,6 +26,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: themeLight.SECOND_COLOR,
+      contrastText: themeLight.SECOND_CONTRAST_TEXT,
     },
   },
   spacing: themeLight.SPACING,
@@ -51,7 +52,7 @@ export default function App() {
                       <Route exact path="/login">
                         <Login />
                       </Route>
-                      <PrivateRouter path="/">
+                      <PrivateRouter path="/" title="Tasks">
                         <List />
                       </PrivateRouter>
                       <Route name="Page 404" component={Page404} />
@@ -68,14 +69,14 @@ export default function App() {
   );
 }
 
-function PrivateRouter({ children, ...rest }) {
-  const isLogined = useSelector((state) => state.auth.isLogined);
+function PrivateRouter({ children, title, ...rest }) {
+  const isLogined = useSelector((state) => state.auth.accessToken);
   return (
     <Route
       {...rest}
       render={({ location }) =>
         isLogined ? (
-          children
+          <Layout title={title}>{children}</Layout>
         ) : (
           <Redirect
             to={{

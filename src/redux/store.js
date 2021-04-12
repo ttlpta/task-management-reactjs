@@ -1,5 +1,15 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { persistStore, persistReducer, createTransform } from "redux-persist";
+import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  createTransform,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import authReducer from "./slices/authSlice";
@@ -14,7 +24,6 @@ const reducers = combineReducers({
 const SetTransform = createTransform(
   (inboundState) => {
     return {
-      isLogined: inboundState.isLogined,
       accessToken: inboundState.accessToken,
       refreshToken: inboundState.refreshToken,
       isRememberme: inboundState.isRememberme,
@@ -37,6 +46,11 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 });
 
 const persistor = persistStore(store);
