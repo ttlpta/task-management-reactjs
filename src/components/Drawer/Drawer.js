@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  Link
+} from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -18,7 +21,7 @@ export default function Drawer(params) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMenuItems());
+    !uiDrawer.list.length && dispatch(getMenuItems());
   }, [dispatch]);
 
   const handleToggleDrawer = () => {
@@ -34,13 +37,15 @@ export default function Drawer(params) {
       <Box paddingTop={8}>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                <MailIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+          {uiDrawer.list.map((item, index) => (
+            <Link to={`/${item.code}`} key={item.code}>
+              <ListItem>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Box>

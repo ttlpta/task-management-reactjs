@@ -22,7 +22,14 @@ export default function Login() {
     try {
       const result = await dispatch(login(data));
       unwrapResult(result);
-      const { from } = location.state || { from: { pathname: "/" } };
+      const { from } =
+        location.state && location.state.from.pathname !== "/logout"
+          ? location.state
+          : {
+              from: { pathname: "/" },
+            };
+
+      
       history.replace(from);
     } catch (error) {
       dispatch(
@@ -34,7 +41,7 @@ export default function Login() {
       );
     }
   };
-  
+
   const auth = useSelector(authState);
 
   return (

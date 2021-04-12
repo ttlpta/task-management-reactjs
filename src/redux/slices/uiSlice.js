@@ -2,22 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { axiosAuth } from "../../axios";
 import { STATUS } from "../../config";
+import asyncThunkWrapper from "../asyncThunkWrapper";
 
-export const getMenuItems = createAsyncThunk(
-  "auth/getMenuItems",
-  async (body, { rejectWithValue, getState }) => {
-    try {
-      const {
-        auth: { accessToken },
-      } = getState();
-      const { data } = await axiosAuth(accessToken).get("/auth/getMenuItems");
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+export const getMenuItems = createAsyncThunk("auth/getMenuItems", 
+  asyncThunkWrapper((body, accessToken) => axiosAuth(accessToken).get("/auth/getMenuItems")));
 
 export const uiSlice = createSlice({
   name: "ui",

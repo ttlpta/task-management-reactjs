@@ -33,7 +33,10 @@ const theme = createMuiTheme({
 });
 
 const Login = lazy(() => import("./scenes/Login/Login"));
-const List = lazy(() => import("./scenes/List/List"));
+const Logout = lazy(() => import("./scenes/Logout/Logout"));
+const Tasks = lazy(() => import("./scenes/Tasks/List"));
+const Categories = lazy(() => import("./scenes/Categories/Categories"));
+const Users = lazy(() => import("./scenes/Users/Users"));
 const Page500 = lazy(() => import("./scenes/500/Page500"));
 const Page404 = lazy(() => import("./scenes/404/Page404"));
 
@@ -52,9 +55,22 @@ export default function App() {
                       <Route exact path="/login">
                         <Login />
                       </Route>
-                      <PrivateRouter path="/" title="Tasks">
-                        <List />
+                      <PrivateRouter exact path="/logout" noLayout>
+                        <Logout />
                       </PrivateRouter>
+                      <PrivateRouter exact path="/" title="Tasks">
+                        <Tasks />
+                      </PrivateRouter>
+                      <PrivateRouter exact path="/categories" title="Categories">
+                        <Categories />
+                      </PrivateRouter>
+                      <PrivateRouter exact path="/users" title="Users">
+                        <Users />
+                      </PrivateRouter>
+                      <Redirect
+                        from="/tasks"
+                        to={"/"}
+                      />
                       <Route name="Page 404" component={Page404} />
                     </Switch>
                   </Page500>
@@ -69,14 +85,14 @@ export default function App() {
   );
 }
 
-function PrivateRouter({ children, title, ...rest }) {
+function PrivateRouter({ children, title, noLayout = false, ...rest }) {
   const isLogined = useSelector((state) => state.auth.accessToken);
   return (
     <Route
       {...rest}
       render={({ location }) =>
         isLogined ? (
-          <Layout title={title}>{children}</Layout>
+          noLayout ? children : <Layout title={title}>{children}</Layout>
         ) : (
           <Redirect
             to={{

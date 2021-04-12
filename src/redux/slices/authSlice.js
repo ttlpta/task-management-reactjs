@@ -1,18 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
 import { STATUS } from "../../config";
+import asyncThunkWrapper from "../asyncThunkWrapper";
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (body, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.post("/auth/login", body);
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
+  asyncThunkWrapper((body) => axios.post("/auth/login", body))
 );
 
 const initialState = {
@@ -25,7 +18,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: async () => {
+    logout: () => {
       return initialState;
     },
   },
