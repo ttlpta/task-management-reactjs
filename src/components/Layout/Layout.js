@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,17 +11,14 @@ import LayoutStyled from "./LayoutStyled";
 import Drawer from "../Drawer/Drawer";
 
 import { toggleDrawer } from "../../redux/slices/uiSlice";
-import { logout as logoutAction } from "../../redux/slices/authSlice";
+import { logout as logoutAction, authState } from "../../redux/slices/authSlice";
 
 function Layout(props) {
+  const auth = useSelector(authState);
   const dispatch = useDispatch();
-  const handleClickMenu = () => {
-    dispatch(toggleDrawer());
-  };
 
-  const logout = () => {
-    dispatch(logoutAction());
-  }
+  const handleClickMenu = () => dispatch(toggleDrawer());
+  const logout = () => dispatch(logoutAction())
 
   return (
     <LayoutStyled>
@@ -33,7 +30,14 @@ function Layout(props) {
           <Typography variant="h6" className="app__title">
             {props.title}
           </Typography>
-          <Button color="inherit" onClick={logout}>Logout</Button>
+          <Box display="flex" alignItems="center">
+            <Box mr="10px">
+              <Typography variant="subtitle1">
+                {auth.currentUser?.name}
+              </Typography>
+            </Box>
+            <Button color="inherit" onClick={logout} variant="outlined" size="small">Logout</Button>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer />

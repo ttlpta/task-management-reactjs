@@ -1,4 +1,4 @@
-export default (API) => async (body, { rejectWithValue, getState, dispatch }) => {
+export default (API) => async (body = {}, { rejectWithValue, getState, dispatch }) => {
 
   try {
     const {

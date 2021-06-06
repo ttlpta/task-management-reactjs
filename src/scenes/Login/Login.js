@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { login, authState } from "../../redux/slices/authSlice";
+import { login, authState, getCurrentUser } from "../../redux/slices/authSlice";
 import { showAlert } from "../../redux/slices/uiSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import {
@@ -22,6 +22,7 @@ export default function Login() {
     try {
       const result = await dispatch(login(data));
       unwrapResult(result);
+      dispatch(getCurrentUser());
       const { from } =
         location.state && location.state.from.pathname !== "/logout"
           ? location.state

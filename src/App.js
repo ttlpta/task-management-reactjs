@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, Fragment } from "react";
+import React, { Suspense, lazy, Fragment, useEffect } from "react";
 import {
   Switch,
   BrowserRouter as Router,
@@ -6,12 +6,13 @@ import {
   Redirect,
 } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   createMuiTheme,
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
 import { PersistGate } from "redux-persist/integration/react";
+import { getCurrentUser, authState } from './redux/slices/authSlice';
 import { Layout, Loading, Snackbar } from "./components";
 
 import reduxStore from "./redux/store";
@@ -45,7 +46,7 @@ export default function App() {
     <Fragment>
       <Normalize />
       <Provider store={reduxStore.store}>
-        <PersistGate loading={null} persistor={reduxStore.persistor}>
+        <PersistGate loading={<Loading />} persistor={reduxStore.persistor} >
           <ThemeProvider theme={themeLight}>
             <MuiThemeProvider theme={theme}>
               <Router>
@@ -86,7 +87,15 @@ export default function App() {
 }
 
 function PrivateRouter({ children, title, noLayout = false, ...rest }) {
-  const isLogined = useSelector((state) => state.auth.accessToken);
+  const dispatch = useDispatch();
+  const auth = useSelector(authState);
+  const isLogined = auth.accessToken;
+  
+  useEffect(() => {
+    if(isLogined && !auth?.currentUser) {
+      dispatch(getCurrentUser());
+    }
+  }, [isLogined]);
   return (
     <Route
       {...rest}

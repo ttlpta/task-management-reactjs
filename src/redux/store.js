@@ -14,11 +14,13 @@ import storage from "redux-persist/lib/storage";
 
 import authReducer from "./slices/authSlice";
 import uiReducer from "./slices/uiSlice";
+import taskReducer from "./slices/taskSlice";
 import { APP_NAME } from "../config";
 
 const reducers = combineReducers({
   auth: authReducer,
   ui: uiReducer,
+  task: taskReducer,
 });
 
 const SetTransform = createTransform(
@@ -26,7 +28,6 @@ const SetTransform = createTransform(
     return {
       accessToken: inboundState.accessToken,
       refreshToken: inboundState.refreshToken,
-      isRememberme: inboundState.isRememberme,
     };
   },
   (outboundState) => {
