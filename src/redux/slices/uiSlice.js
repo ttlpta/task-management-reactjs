@@ -7,20 +7,22 @@ import asyncThunkWrapper from "../asyncThunkWrapper";
 export const getMenuItems = createAsyncThunk("auth/getMenuItems", 
   asyncThunkWrapper((body, accessToken) => axiosAuth(accessToken).get("/auth/getMenuItems")));
 
+
+const initialState = {
+  alert: {
+    show: false,
+    message: "",
+    type: "success",
+  },
+  drawer: {
+    list: [],
+    open: false,
+    status: STATUS.IDLE
+  },
+}
 export const uiSlice = createSlice({
   name: "ui",
-  initialState: {
-    alert: {
-      show: false,
-      message: "",
-      type: "success",
-    },
-    drawer: {
-      list: [],
-      open: false,
-      status: STATUS.IDLE
-    },
-  },
+  initialState,
   reducers: {
     showAlert(state, action) {
       state.alert = action.payload;

@@ -1,7 +1,7 @@
 import React from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import loading from "../../assets/images/loading.gif";
 
 export default function Spinner() {
 
-  return <CircularProgress color="secondary" />
+  return <img src={loading} alt="loading img" width="240"/>
 }

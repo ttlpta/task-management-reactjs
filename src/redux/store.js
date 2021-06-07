@@ -17,11 +17,19 @@ import uiReducer from "./slices/uiSlice";
 import taskReducer from "./slices/taskSlice";
 import { APP_NAME } from "../config";
 
-const reducers = combineReducers({
+const appReducer = combineReducers({
   auth: authReducer,
   ui: uiReducer,
   task: taskReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'auth/logout') {
+    return appReducer(undefined, action)
+  }
+
+  return appReducer(state, action)
+}
 
 const SetTransform = createTransform(
   (inboundState) => {
@@ -43,7 +51,7 @@ const persistConfig = {
   transforms: [SetTransform],
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,

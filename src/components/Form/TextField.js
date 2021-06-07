@@ -1,7 +1,9 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import TextField from "../TextField/TextField";
 
-export default function TextFieldForm({ register, name, errors, ...props }) {
+export default function TextFieldForm({ name, ...props }) {
+  const { register, formState: { errors } } = useFormContext();
   const { ref, ...methods } = register(name);
 
   return (

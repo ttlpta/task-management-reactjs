@@ -1,18 +1,19 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Checkbox from "../Checkbox/Checkbox";
 
 export default function CheckboxForm({
-  register,
   name,
-  errors,
   label,
   ...props
 }) {
 
+  const { register, formState: { errors } } = useFormContext();
   const { ref, ...methods } = register(name);
+
   return (
     <FormControl error={!!errors[name]}>
       <FormControlLabel
