@@ -63,7 +63,6 @@ export const taskSlice = createSlice({
     },
     [getTaskById.fulfilled]: (state, action) => {
       state.status = STATUS.SUCCEEDED;
-      taskAdapter.upsertOne(state, action.payload);
     },
     [getTaskById.rejected]: (state, action) => {
       state.status = STATUS.LOADING;

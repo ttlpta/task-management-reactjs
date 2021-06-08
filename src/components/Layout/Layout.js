@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,15 +11,16 @@ import LayoutStyled from "./LayoutStyled";
 import Drawer from "../Drawer/Drawer";
 
 import { toggleDrawer } from "../../redux/slices/uiSlice";
-import { logout as logoutAction, authState } from "../../redux/slices/authSlice";
+import { logout as logoutAction } from "../../redux/slices/authSlice";
+import UserInfo from "./UserInfo";
 
 function Layout(props) {
-  const auth = useSelector(authState);
   const dispatch = useDispatch();
 
   const handleClickMenu = () => dispatch(toggleDrawer());
   const logout = () => dispatch(logoutAction())
 
+  console.log('layout render');
   return (
     <LayoutStyled>
       <AppBar position="static" color="secondary">
@@ -32,9 +33,7 @@ function Layout(props) {
           </Typography>
           <Box display="flex" alignItems="center">
             <Box mr="10px">
-              <Typography variant="subtitle1">
-                {auth.currentUser?.name}
-              </Typography>
+              <UserInfo />
             </Box>
             <Button color="inherit" onClick={logout} variant="outlined" size="small">Logout</Button>
           </Box>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
@@ -38,8 +38,8 @@ function DataTable({ onEdit }) {
     if (name === "action") {
       return (
         <Box>
-          <IconButton aria-label="edit">
-            <EditIcon fontSize="small" onClick={() => handleClickEdit(data)} />
+          <IconButton aria-label="edit" onClick={() => handleClickEdit(data)}>
+            <EditIcon fontSize="small" />
           </IconButton>
           <IconButton aria-label="delete">
             <DeleteIcon fontSize="small" />
@@ -50,9 +50,8 @@ function DataTable({ onEdit }) {
     return data[name] || "N/A";
   };
 
-  console.log('=====>');
-  return (
-    <TableContainer component={Paper}>
+  const renderTable = useMemo(() => {
+    return (
       <Table>
         <TableHead>
           <TableRow>
@@ -79,8 +78,10 @@ function DataTable({ onEdit }) {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
-  );
+    );
+  }, [tasks]);
+
+  return <TableContainer component={Paper}>{renderTable}</TableContainer>;
 }
 
-export default React.memo(DataTable);
+export default DataTable;
