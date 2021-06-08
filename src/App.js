@@ -8,7 +8,7 @@ import {
 import { ThemeProvider } from "styled-components";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
-  createMuiTheme,
+  unstable_createMuiStrictModeTheme as createMuiTheme,
   ThemeProvider as MuiThemeProvider,
 } from "@material-ui/core/styles";
 import { PersistGate } from "redux-persist/integration/react";
@@ -95,7 +95,7 @@ function PrivateRouter({ children, title, noLayout = false, ...rest }) {
     if(isLogined && !auth?.currentUser) {
       dispatch(getCurrentUser());
     }
-  }, [isLogined]);
+  }, [isLogined]);  // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Route
       {...rest}

@@ -22,7 +22,7 @@ export default function Drawer(params) {
 
   useEffect(() => {
     !uiDrawer.list.length && dispatch(getMenuItems());
-  }, [dispatch]);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleToggleDrawer = () => {
     dispatch(toggleDrawer());

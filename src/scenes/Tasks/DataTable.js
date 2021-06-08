@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,24 +12,22 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
-import { selectAllTasks } from "../../redux/slices/taskSlice";
+import { getTasks, selectAllTasks } from "../../redux/slices/taskSlice";
 
-function DataTable({ onEdit }) {
-  const tasks = useSelector(selectAllTasks);
+const columnData = [
+  { code: "id", label: "ID" },
+  { code: "name", label: "Name" },
+  { code: "description", label: "Description" },
+  { code: "status", label: "Status" },
+  { code: "categoryId", label: "Category" },
+  { code: "ownerId", label: "Owner" },
+  { code: "deadline", label: "Deadline" },
+  { code: "createdAt", label: "Create At" },
+  { code: "updateAt", label: "Update At" },
+  { code: "action", label: "Action" },
+];
 
-  const columnData = [
-    { code: "id", label: "ID" },
-    { code: "name", label: "Name" },
-    { code: "description", label: "Description" },
-    { code: "status", label: "Status" },
-    { code: "categoryId", label: "Category" },
-    { code: "ownerId", label: "Owner" },
-    { code: "deadline", label: "Deadline" },
-    { code: "createdAt", label: "Create At" },
-    { code: "updateAt", label: "Update At" },
-    { code: "action", label: "Action" },
-  ];
-
+function Row({ row, onEdit }) {
   const handleClickEdit = (task) => {
     onEdit(task.id);
   };
@@ -50,7 +48,30 @@ function DataTable({ onEdit }) {
     return data[name] || "N/A";
   };
 
+  const renderRow = useMemo(() => {
+    console.log("render row");
+    return (
+      <TableRow key={row.name + row.id}>
+        {columnData.map((column, key) => {
+          return (
+            <TableCell key={`columnItem-${column.code}`}>
+              {renderData(row, column.code)}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    );
+  }, [row]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return renderRow;
+}
+
+function DataTable({ onEdit }) {
+  const dispatch = useDispatch();
+  const tasks = useSelector(selectAllTasks);
+
   const renderTable = useMemo(() => {
+    console.log("datatale render");
     return (
       <Table>
         <TableHead>
@@ -66,20 +87,16 @@ function DataTable({ onEdit }) {
         </TableHead>
         <TableBody>
           {tasks.map((row) => (
-            <TableRow key={row.name + row.id}>
-              {columnData.map((column, key) => {
-                return (
-                  <TableCell key={`columnItem-${column.code}`}>
-                    {renderData(row, column.code)}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
+            <Row row={row} onEdit={onEdit} />
           ))}
         </TableBody>
       </Table>
     );
-  }, [tasks]);
+  }, [tasks]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    dispatch(getTasks());
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <TableContainer component={Paper}>{renderTable}</TableContainer>;
 }

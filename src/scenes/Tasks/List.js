@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import Button from '@material-ui/core/Button';
 import CreateTaskDialog from "../../components/Dialogs/CreateTaskDialog";
 
-import { getTasks } from "../../redux/slices/taskSlice";
 import DataTable from "./DataTable";
 
 
-export default function Task(props) {
+function Task(props) {
   const [selectedTask, selectTask] = useState(null);
-  const dispatch = useDispatch();
   const [openAddDialog, toggleAddDialog] = useState(false);
   const handleClickEdit = (taskId) => {
     selectTask(taskId);
@@ -28,10 +25,7 @@ export default function Task(props) {
     }, 100);
   }
 
-  useEffect(() => {
-    dispatch(getTasks());
-  }, []);
-
+  console.log('task list renderr');
   return (
     <Box height="100%">
       <Box mb={2}>
@@ -46,3 +40,5 @@ export default function Task(props) {
     </Box>
   );
 }
+
+export default Task;

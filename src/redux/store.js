@@ -1,4 +1,8 @@
-import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware,
+} from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -24,12 +28,12 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === 'auth/logout') {
-    return appReducer(undefined, action)
+  if (action.type === "auth/logout") {
+    return appReducer(undefined, action);
   }
 
-  return appReducer(state, action)
-}
+  return appReducer(state, action);
+};
 
 const SetTransform = createTransform(
   (inboundState) => {
@@ -64,4 +68,6 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-export default { store, persistor };
+const S = { store, persistor };
+
+export default S;

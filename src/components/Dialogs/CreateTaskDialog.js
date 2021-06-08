@@ -9,19 +9,30 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { showAlert } from "../../redux/slices/uiSlice";
 import TextFieldForm from "../Form/TextField";
 import Form from "../Form/Form";
-import { createTask, getTaskById, selectTaskById, updateTask } from "../../redux/slices/taskSlice";
+import {
+  createTask,
+  getTaskById,
+  selectTaskById,
+  updateTask,
+} from "../../redux/slices/taskSlice";
 
 import { CreateTaskSchema } from "../../schemas";
 import { useEffect, useState } from "react";
 
-export default function CreateTaskDialog({ open, handleClose: close, taskId = null }) {
+export default function CreateTaskDialog({
+  open,
+  handleClose: close,
+  taskId = null,
+}) {
   const dispatch = useDispatch();
   const [formLoading, setFormLoading] = useState(false);
-  const task = useSelector(state => selectTaskById(state, taskId));
+  const task = useSelector((state) => selectTaskById(state, taskId));
   const handleSubmit = async (data) => {
     try {
       setFormLoading(true);
-      const result = task ? await dispatch(updateTask({id: task.id, ...data})) : await dispatch(createTask(data));
+      const result = task
+        ? await dispatch(updateTask({ id: task.id, ...data }))
+        : await dispatch(createTask(data));
       unwrapResult(result);
       dispatch(
         showAlert({
@@ -49,14 +60,22 @@ export default function CreateTaskDialog({ open, handleClose: close, taskId = nu
   };
 
   useEffect(() => {
-    if(taskId) {
-      console.log(taskId);
+    if (taskId) {
       setFormLoading(true);
       dispatch(getTaskById(taskId)).finally(() => {
         setFormLoading(false);
       });
     }
   }, [taskId, dispatch]);
+  const defaultValue = task
+    ? {
+        name: task.name,
+        authorID: task.authorID,
+        ownerId: task.ownerId,
+        categoryId: task.categoryId,
+        description: task.description,
+      }
+    : {};
 
   return (
     <Dialog
@@ -67,12 +86,14 @@ export default function CreateTaskDialog({ open, handleClose: close, taskId = nu
       aria-labelledby="form-dialog-title"
     >
       <Form
-        defaultValues={task}
+        defaultValues={defaultValue}
         loading={formLoading}
         onSubmit={handleSubmit}
         schema={CreateTaskSchema}
       >
-        <DialogTitle id="form-dialog-title">{task ? `Edit task ${task.name}` : `Add new task`}</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {task ? `Edit task ${task.name}` : `Add new task`}
+        </DialogTitle>
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={12}>
